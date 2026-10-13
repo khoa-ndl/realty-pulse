@@ -28,6 +28,9 @@ export function IssueList({ issues }: { issues: IssueRecord[] }) {
             <th className="border-b border-[var(--color-border)] px-4 py-3 text-left font-[family-name:var(--font-data)] text-xs uppercase tracking-wide text-[var(--color-muted-foreground)]">
               Research summary
             </th>
+            <th className="border-b border-[var(--color-border)] px-4 py-3 text-left font-[family-name:var(--font-data)] text-xs uppercase tracking-wide text-[var(--color-muted-foreground)]">
+              Status
+            </th>
             <th className="border-b border-[var(--color-border)] px-4 py-3" />
           </tr>
         </thead>
@@ -51,6 +54,17 @@ export function IssueList({ issues }: { issues: IssueRecord[] }) {
               <td className="border-b border-[var(--color-border)] px-4 py-4 text-sm">{issue.listings.length}</td>
               <td className="max-w-[360px] truncate border-b border-[var(--color-border)] px-4 py-4 text-sm text-[var(--color-muted-foreground)]">
                 {issue.marketSummary}
+              </td>
+              <td className="border-b border-[var(--color-border)] px-4 py-4 text-sm">
+                <span
+                  className={`rounded-full px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold ${
+                    issue.sentAt
+                      ? "bg-[#E6EFE6] text-[var(--color-success)]"
+                      : "bg-[var(--color-muted)] text-[var(--color-muted-foreground)]"
+                  }`}
+                >
+                  {issue.sentAt ? "Sent" : "Not sent"}
+                </span>
               </td>
               <td className="border-b border-[var(--color-border)] px-4 py-4 text-sm">
                 <Link href={`/dashboard/archive/${issue.id}`} className="font-semibold text-[var(--color-primary)]">

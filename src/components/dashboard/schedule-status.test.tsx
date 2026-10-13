@@ -28,4 +28,15 @@ describe("ScheduleStatus", () => {
     render(<ScheduleStatus scheduledIssues={[]} nextRun={new Date("2026-10-13T16:00:00Z")} />);
     expect(screen.getByText(/next scheduled run/i)).toBeInTheDocument();
   });
+
+  it('shows a "Not sent" badge next to the last run when it has no sentAt', () => {
+    render(<ScheduleStatus scheduledIssues={[lastRun]} nextRun={new Date("2026-10-13T16:00:00Z")} />);
+    expect(screen.getAllByText(/not sent/i).length).toBeGreaterThan(0);
+  });
+
+  it('shows a "Sent" badge next to the last run and in the runs table when it has a sentAt', () => {
+    const sentRun: IssueRecord = { ...lastRun, sentAt: "2026-10-06T16:05:00Z" };
+    render(<ScheduleStatus scheduledIssues={[sentRun]} nextRun={new Date("2026-10-13T16:00:00Z")} />);
+    expect(screen.getAllByText(/^sent$/i).length).toBe(2);
+  });
 });

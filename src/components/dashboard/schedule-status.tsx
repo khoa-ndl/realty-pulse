@@ -23,8 +23,14 @@ export function ScheduleStatus({
                 <span className="font-[family-name:var(--font-heading)] text-xl text-[var(--color-foreground)]">
                   {formatPacificDateTime(lastRun.createdAt)}
                 </span>
-                <span className="rounded-full bg-[var(--color-muted)] px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold text-[var(--color-muted-foreground)]">
-                  Generated
+                <span
+                  className={`rounded-full px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold ${
+                    lastRun.sentAt
+                      ? "bg-[#E6EFE6] text-[var(--color-success)]"
+                      : "bg-[var(--color-muted)] text-[var(--color-muted-foreground)]"
+                  }`}
+                >
+                  {lastRun.sentAt ? "Sent" : "Not sent"}
                 </span>
               </div>
               <p className="text-sm text-[var(--color-muted-foreground)]">
@@ -67,8 +73,14 @@ export function ScheduleStatus({
                     {formatPacificDateTime(issue.createdAt)}
                   </td>
                   <td className="border-b border-[var(--color-border)] px-4 py-3 text-sm">
-                    <span className="rounded-full bg-[var(--color-muted)] px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold text-[var(--color-muted-foreground)]">
-                      Generated
+                    <span
+                      className={`rounded-full px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold ${
+                        issue.sentAt
+                          ? "bg-[#E6EFE6] text-[var(--color-success)]"
+                          : "bg-[var(--color-muted)] text-[var(--color-muted-foreground)]"
+                      }`}
+                    >
+                      {issue.sentAt ? "Sent" : "Not sent"}
                     </span>
                   </td>
                   <td className="border-b border-[var(--color-border)] px-4 py-3 text-sm">{issue.listings.length}</td>

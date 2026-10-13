@@ -25,4 +25,15 @@ describe("IssueList", () => {
     render(<IssueList issues={[]} />);
     expect(screen.getByText(/no issues yet/i)).toBeInTheDocument();
   });
+
+  it('shows a "Not sent" badge for an issue with no sentAt', () => {
+    render(<IssueList issues={[issue]} />);
+    expect(screen.getByText(/not sent/i)).toBeInTheDocument();
+  });
+
+  it('shows a "Sent" badge for an issue with a sentAt timestamp', () => {
+    const sentIssue: IssueRecord = { ...issue, sentAt: "2026-10-06T16:05:00Z" };
+    render(<IssueList issues={[sentIssue]} />);
+    expect(screen.getByText(/^sent$/i)).toBeInTheDocument();
+  });
 });
