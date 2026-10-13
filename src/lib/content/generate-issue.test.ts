@@ -65,4 +65,10 @@ describe("generateIssue", () => {
     await expect(generateIssue(deps, { triggerType: "manual" })).rejects.toThrow("kie.ai task timed out");
     expect(deps.issueStore.saveIssue).not.toHaveBeenCalled();
   });
+
+  it("propagates a saveIssue failure instead of swallowing it", async () => {
+    const deps = makeDeps();
+    vi.mocked(deps.issueStore.saveIssue).mockRejectedValue(new Error("Failed to save issue: connection refused"));
+    await expect(generateIssue(deps, { triggerType: "manual" })).rejects.toThrow("Failed to save issue: connection refused");
+  });
 });

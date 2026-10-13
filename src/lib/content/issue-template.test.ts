@@ -56,4 +56,27 @@ describe("renderIssueHtml", () => {
     const html = renderIssueHtml({ marketCommentary: "commentary", listings: [listing, second], baseUrl: "https://realtypulse.example.com" });
     expect(html.indexOf(listing.address)).toBeLessThan(html.indexOf(second.address));
   });
+
+  it("escapes HTML-special characters in AI-generated commentary and blurbs instead of breaking the markup", () => {
+    const injected: StoredListing = {
+      ...listing,
+      blurb: "Great <b>deal</b> & cozy home",
+    };
+    const html = renderIssueHtml({
+      marketCommentary: "Rates & inventory <are> tightening",
+      listings: [injected],
+      baseUrl: "https://realtypulse.example.com",
+    });
+    expect(html).not.toContain("<b>deal</b>");
+    expect(html).not.toContain("<are>");
+    expect(html).toContain("Rates &amp; inventory &lt;are&gt; tightening");
+    expect(html).toContain("Great &lt;b&gt;deal&lt;/b&gt; &amp; cozy home");
+  });
+
+  it("escapes a double quote in a photo URL so it can't break out of the src attribute", () => {
+    const injected: StoredListing = { ...listing, photoUrls: ['https://img.example.com/1.png"onerror="alert(1)'] };
+    const html = renderIssueHtml({ marketCommentary: "commentary", listings: [injected], baseUrl: "https://realtypulse.example.com" });
+    expect(html).not.toContain('src="https://img.example.com/1.png"onerror="alert(1)"');
+    expect(html).toContain("&quot;onerror=&quot;alert(1)");
+  });
 });

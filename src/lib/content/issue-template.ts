@@ -1,8 +1,19 @@
 import type { StoredListing } from "./issue-store";
 
+function escapeHtml(text: string): string {
+  return text.replace(/&/g, "&amp;").replace(/</g, "&lt;").replace(/>/g, "&gt;");
+}
+
+function escapeAttr(text: string): string {
+  return escapeHtml(text).replace(/"/g, "&quot;");
+}
+
 function renderListing(listing: StoredListing): string {
   const photos = listing.photoUrls
-    .map((url) => `<td style="padding: 4px;"><img src="${url}" width="150" alt="Property photo" style="border-radius: 6px;" /></td>`)
+    .map(
+      (url) =>
+        `<td style="padding: 4px;"><img src="${escapeAttr(url)}" width="150" alt="Property photo" style="border-radius: 6px;" /></td>`
+    )
     .join("");
 
   return `
@@ -17,8 +28,8 @@ function renderListing(listing: StoredListing): string {
             <td>${listing.sqft.toLocaleString("en-US")} sqft</td>
           </tr>
         </table>
-        <p style="margin: 8px 0 0; font-weight: bold;">${listing.address}</p>
-        <p style="margin: 4px 0 0; color: #333;">${listing.blurb}</p>
+        <p style="margin: 8px 0 0; font-weight: bold;">${escapeHtml(listing.address)}</p>
+        <p style="margin: 4px 0 0; color: #333;">${escapeHtml(listing.blurb)}</p>
       </td>
     </tr>
   `;
@@ -48,7 +59,7 @@ export function renderIssueHtml(content: {
             </tr>
             <tr>
               <td style="padding: 16px 24px; color: #333;">
-                <p style="margin: 0;">${content.marketCommentary}</p>
+                <p style="margin: 0;">${escapeHtml(content.marketCommentary)}</p>
               </td>
             </tr>
             ${listingRows}
