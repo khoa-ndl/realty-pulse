@@ -84,6 +84,35 @@ export function createOutboundServer(store: SubscriberStore, sender: EmailSender
   );
 
   server.registerTool(
+    "add_pending_subscriber",
+    {
+      description: "Register a pending subscriber who must confirm via email before receiving sends",
+      inputSchema: z.object({ email: normalizedEmail, source: z.string().optional(), token: z.string().min(1) }),
+      outputSchema: z.object({ status: z.enum(["created", "skipped"]) }),
+    },
+    wrapToolHandler(async ({ email, source, token }) => {
+      const status = await store.addPendingSubscriber(email, token, source);
+      return { content: [{ type: "text", text: status }], structuredContent: { status } };
+    })
+  );
+
+  server.registerTool(
+    "confirm_subscriber",
+    {
+      description: "Confirm a pending subscriber using their confirmation token",
+      inputSchema: z.object({ token: z.string().min(1) }),
+      outputSchema: z.object({ email: z.string().nullable() }),
+    },
+    wrapToolHandler(async ({ token }) => {
+      const email = await store.confirmSubscriber(token);
+      return {
+        content: [{ type: "text", text: email ? `Confirmed ${email}` : "Invalid or expired token" }],
+        structuredContent: { email },
+      };
+    })
+  );
+
+  server.registerTool(
     "send_email",
     {
       description: "Send an HTML email",

@@ -19,8 +19,14 @@ async function startTestServer(handler: FetchLikeMcpHandler) {
   };
 }
 
+type FakeRow = SubscriberRecord & {
+  unsubscribedAt: string | null;
+  confirmedAt: string | null;
+  confirmationToken: string | null;
+};
+
 function makeFakeStore() {
-  const rows = new Map<string, SubscriberRecord & { unsubscribedAt: string | null }>();
+  const rows = new Map<string, FakeRow>();
   const store: SubscriberStore = {
     async addSubscriber(email, source) {
       rows.set(email, {
@@ -28,16 +34,43 @@ function makeFakeStore() {
         source: source ?? null,
         subscribedAt: new Date().toISOString(),
         unsubscribedAt: null,
+        confirmedAt: new Date().toISOString(),
+        confirmationToken: null,
       });
     },
     async listSubscribers() {
       return [...rows.values()]
-        .filter((r) => r.unsubscribedAt === null)
+        .filter((r) => r.unsubscribedAt === null && r.confirmedAt !== null)
         .map(({ email, source, subscribedAt }) => ({ email, source, subscribedAt }));
     },
     async removeSubscriber(email) {
       const row = rows.get(email);
       if (row) row.unsubscribedAt = new Date().toISOString();
+    },
+    async addPendingSubscriber(email, token, source) {
+      const existing = rows.get(email);
+      if (existing && existing.confirmedAt && !existing.unsubscribedAt) {
+        return "skipped";
+      }
+      rows.set(email, {
+        email,
+        source: source ?? null,
+        subscribedAt: new Date().toISOString(),
+        unsubscribedAt: null,
+        confirmedAt: null,
+        confirmationToken: token,
+      });
+      return "created";
+    },
+    async confirmSubscriber(token) {
+      for (const row of rows.values()) {
+        if (row.confirmationToken === token && !row.unsubscribedAt) {
+          row.confirmedAt = new Date().toISOString();
+          row.confirmationToken = null;
+          return row.email;
+        }
+      }
+      return null;
     },
   };
   return store;
@@ -196,5 +229,68 @@ describe("outbound MCP server", () => {
     await client.callTool({ name: "remove_subscriber", arguments: { email: "f@example.com" } });
     const listed = await client.callTool({ name: "list_subscribers", arguments: {} });
     expect(subscribersOf(listed).some((s) => s.email.toLowerCase() === "f@example.com")).toBe(false);
+  });
+
+  it("a pending subscriber does not appear in list_subscribers until confirmed", async () => {
+    await client.callTool({
+      name: "add_pending_subscriber",
+      arguments: { email: "g@example.com", token: "tok-g" },
+    });
+    const beforeConfirm = await client.callTool({ name: "list_subscribers", arguments: {} });
+    expect(subscribersOf(beforeConfirm).some((s) => s.email === "g@example.com")).toBe(false);
+
+    const confirmed = await client.callTool({ name: "confirm_subscriber", arguments: { token: "tok-g" } });
+    expect((confirmed.structuredContent as { email: string | null }).email).toBe("g@example.com");
+
+    const afterConfirm = await client.callTool({ name: "list_subscribers", arguments: {} });
+    expect(subscribersOf(afterConfirm).some((s) => s.email === "g@example.com")).toBe(true);
+    await client.callTool({ name: "remove_subscriber", arguments: { email: "g@example.com" } });
+  });
+
+  it("confirming an invalid or already-used token reports a null email, not an error", async () => {
+    const result = await client.callTool({ name: "confirm_subscriber", arguments: { token: "never-issued" } });
+    expect(result.isError).toBeFalsy();
+    expect((result.structuredContent as { email: string | null }).email).toBeNull();
+  });
+
+  it("registering a pending signup for an already-active email reports skipped and sends no second token", async () => {
+    await client.callTool({ name: "add_subscriber", arguments: { email: "h@example.com" } });
+    const result = await client.callTool({
+      name: "add_pending_subscriber",
+      arguments: { email: "h@example.com", token: "tok-h" },
+    });
+    expect((result.structuredContent as { status: string }).status).toBe("skipped");
+    const confirmAttempt = await client.callTool({ name: "confirm_subscriber", arguments: { token: "tok-h" } });
+    expect((confirmAttempt.structuredContent as { email: string | null }).email).toBeNull();
+    await client.callTool({ name: "remove_subscriber", arguments: { email: "h@example.com" } });
+  });
+
+  it("a confirm link for a since-unsubscribed pending signup reports a null email, not a stale confirmation", async () => {
+    await client.callTool({
+      name: "add_pending_subscriber",
+      arguments: { email: "j@example.com", token: "tok-j" },
+    });
+    await client.callTool({ name: "remove_subscriber", arguments: { email: "j@example.com" } });
+    const confirmAttempt = await client.callTool({ name: "confirm_subscriber", arguments: { token: "tok-j" } });
+    expect((confirmAttempt.structuredContent as { email: string | null }).email).toBeNull();
+  });
+
+  it("adding a subscriber through the trusted admin path activates a previously-pending signup", async () => {
+    await client.callTool({
+      name: "add_pending_subscriber",
+      arguments: { email: "k@example.com", token: "tok-k" },
+    });
+    await client.callTool({ name: "add_subscriber", arguments: { email: "k@example.com", source: "admin" } });
+    const listed = await client.callTool({ name: "list_subscribers", arguments: {} });
+    expect(subscribersOf(listed).some((s) => s.email === "k@example.com")).toBe(true);
+    await client.callTool({ name: "remove_subscriber", arguments: { email: "k@example.com" } });
+  });
+
+  it("connectOutboundMcpClient's addPendingSubscriber/confirmSubscriber round-trip correctly", async () => {
+    const status = await wrapper.addPendingSubscriber("i@example.com", "tok-i");
+    expect(status).toBe("created");
+    const email = await wrapper.confirmSubscriber("tok-i");
+    expect(email).toBe("i@example.com");
+    await client.callTool({ name: "remove_subscriber", arguments: { email: "i@example.com" } });
   });
 });
