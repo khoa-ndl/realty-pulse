@@ -62,4 +62,53 @@ describe("createKieAiImageGenerator", () => {
     await expect(generator.generatePropertyPhotos(listing)).rejects.toThrow(/timed out|maxPolls|waiting/i);
     expect(fetchImpl).toHaveBeenCalledTimes(1 + 3);
   });
+
+  it("throws when a success response has no usable resultUrls", async () => {
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse({ code: 200, data: { taskId: "task-4" } }))
+      .mockImplementation(() =>
+        Promise.resolve(jsonResponse({ code: 200, data: { state: "success", resultJson: JSON.stringify({ resultUrls: [] }) } }))
+      );
+    const generator = createKieAiImageGenerator("test-key", { fetchImpl, sleepImpl: vi.fn() });
+    await expect(generator.generatePropertyPhotos(listing)).rejects.toThrow(/resultUrls/);
+  });
+
+  it("throws a clear error when resultJson is missing or malformed on success", async () => {
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse({ code: 200, data: { taskId: "task-5" } }))
+      .mockImplementation(() => Promise.resolve(jsonResponse({ code: 200, data: { state: "success" } })));
+    const generator = createKieAiImageGenerator("test-key", { fetchImpl, sleepImpl: vi.fn() });
+    await expect(generator.generatePropertyPhotos(listing)).rejects.toThrow(/resultUrls|resultJson/);
+  });
+
+  it("throws naming the HTTP status when createTask returns a non-2xx response", async () => {
+    const fetchImpl = vi.fn().mockResolvedValueOnce(new Response(JSON.stringify({ msg: "invalid key" }), { status: 401 }));
+    const generator = createKieAiImageGenerator("test-key", { fetchImpl, sleepImpl: vi.fn() });
+    await expect(generator.generatePropertyPhotos(listing)).rejects.toThrow(/401/);
+  });
+
+  it("throws naming the HTTP status when a poll returns a non-2xx response, instead of treating it as waiting", async () => {
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse({ code: 200, data: { taskId: "task-6" } }))
+      .mockResolvedValueOnce(new Response(JSON.stringify({ msg: "unauthorized" }), { status: 401 }));
+    const generator = createKieAiImageGenerator("test-key", { fetchImpl, sleepImpl: vi.fn() });
+    await expect(generator.generatePropertyPhotos(listing)).rejects.toThrow(/401/);
+    expect(fetchImpl).toHaveBeenCalledTimes(2);
+  });
+
+  it("includes a no-text/caption/watermark instruction in the image prompt", async () => {
+    const fetchImpl = vi
+      .fn()
+      .mockResolvedValueOnce(jsonResponse({ code: 200, data: { taskId: "task-7" } }))
+      .mockResolvedValueOnce(
+        jsonResponse({ code: 200, data: { state: "success", resultJson: JSON.stringify({ resultUrls: ["https://img.example.com/1.png"] }) } })
+      );
+    const generator = createKieAiImageGenerator("test-key", { fetchImpl, sleepImpl: vi.fn() });
+    await generator.generatePropertyPhotos(listing);
+    const createBody = JSON.parse(fetchImpl.mock.calls[0][1].body);
+    expect(createBody.input.prompt).toMatch(/no text|no captions|no signage|no watermarks/i);
+  });
 });

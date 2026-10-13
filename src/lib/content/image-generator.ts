@@ -24,7 +24,7 @@ export function createKieAiImageGenerator(
 
   return {
     async generatePropertyPhotos(listing: SyntheticListing): Promise<string[]> {
-      const prompt = `A professional real estate photo of a ${listing.beds}-bedroom, ${listing.baths}-bathroom home, ${listing.sqft} square feet, in the ${listing.neighborhood} neighborhood of Seattle.`;
+      const prompt = `A professional real estate photo of a ${listing.beds}-bedroom, ${listing.baths}-bathroom home, ${listing.sqft} square feet, in the ${listing.neighborhood} neighborhood of Seattle. No text, captions, signage, or watermarks.`;
 
       const createResponse = await fetchImpl("https://api.kie.ai/api/v1/jobs/createTask", {
         method: "POST",
@@ -37,10 +37,13 @@ export function createKieAiImageGenerator(
           input: { prompt, output_format: "png" },
         }),
       });
+      if (!createResponse.ok) {
+        throw new Error(`kie.ai createTask HTTP error: ${createResponse.status}`);
+      }
       const createBody = await createResponse.json();
       const taskId = createBody?.data?.taskId;
       if (!taskId) {
-        throw new Error("kie.ai createTask response had no taskId");
+        throw new Error(`kie.ai createTask response had no taskId: ${JSON.stringify(createBody)}`);
       }
 
       for (let attempt = 0; attempt < maxPolls; attempt++) {
@@ -48,15 +51,21 @@ export function createKieAiImageGenerator(
           `https://api.kie.ai/api/v1/jobs/recordInfo?taskId=${taskId}`,
           { headers: { Authorization: `Bearer ${apiKey}` } }
         );
+        if (!pollResponse.ok) {
+          throw new Error(`kie.ai recordInfo HTTP error: ${pollResponse.status}`);
+        }
         const pollBody = await pollResponse.json();
         const state = pollBody?.data?.state;
 
         if (state === "success") {
-          const resultJson = JSON.parse(pollBody.data.resultJson);
-          return resultJson.resultUrls;
+          const resultUrls = parseResultUrls(pollBody.data.resultJson);
+          return resultUrls;
         }
         if (state === "fail") {
           throw new Error(`kie.ai task failed: ${pollBody?.data?.failMsg ?? "unknown reason"}`);
+        }
+        if (state !== "waiting") {
+          throw new Error(`kie.ai recordInfo returned an unexpected state: ${JSON.stringify(pollBody)}`);
         }
 
         await sleepImpl(2000);
@@ -65,4 +74,20 @@ export function createKieAiImageGenerator(
       throw new Error(`kie.ai task timed out after ${maxPolls} polls`);
     },
   };
+}
+
+function parseResultUrls(resultJson: unknown): string[] {
+  let parsed: unknown;
+  try {
+    parsed = typeof resultJson === "string" ? JSON.parse(resultJson) : resultJson;
+  } catch {
+    throw new Error(`kie.ai success response had unparseable resultJson: ${JSON.stringify(resultJson)}`);
+  }
+  const resultUrls = (parsed as { resultUrls?: unknown })?.resultUrls;
+  const isValid =
+    Array.isArray(resultUrls) && resultUrls.length > 0 && resultUrls.every((u) => typeof u === "string");
+  if (!isValid) {
+    throw new Error(`kie.ai success response had no usable resultUrls: ${JSON.stringify(resultJson)}`);
+  }
+  return resultUrls;
 }

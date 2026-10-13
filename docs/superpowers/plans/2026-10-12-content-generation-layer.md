@@ -282,7 +282,7 @@ export function createAnthropicMessageClient(apiKey: string): AnthropicMessageCl
   return {
     async createMessage(prompt: string) {
       const message = await anthropic.messages.create({
-        model: "claude-sonnet-4-5",
+        model: "claude-haiku-5-5", // see plan's ledger ruling: Haiku fits this cheap, high-volume copywriting task
         max_tokens: 300,
         messages: [{ role: "user", content: prompt }],
       });
@@ -437,3 +437,7 @@ git commit -m "feat: add kie.ai (Nano Banana) property photo generator"
 **Review Focus:** all five lines have an owning task and an automated test (Perplexity non-2xx/empty-choices, Claude error propagation, kie.ai fail-state and maxPolls-timeout, listing generator's range-boundary tests).
 
 **Proportion:** four small tasks; code blocks appear only where an algorithm isn't fully determined by signature and test (range-scaling arithmetic, the poll loop, the real SDK/fetch wiring) — tool-call shapes elsewhere are described by name and left to the implementer.
+
+## Post-Execution Note
+
+The final review flagged that `generatePropertyPhotos(listing): Promise<string[]>` returns whatever single-task result kie.ai gives back for one prompt — it does not itself guarantee a multi-shot "carousel" (exterior, kitchen, living room, etc.) of one consistent property. Ruling: deciding how to get a coherent multi-photo carousel per listing (multiple calls with different room prompts? image-to-image chaining for consistency?) is an assembly-layer/orchestration decision, not this building-block's — the next plan (assembly + storage) owns that call. See the plan's ledger for the full ruling text.
