@@ -36,4 +36,16 @@ describe("getEnv", () => {
   it("ENV_KEYS lists exactly the required keys", () => {
     expect(new Set(ENV_KEYS)).toEqual(new Set(Object.keys(REQUIRED)));
   });
+
+  it("rejects a whitespace-only value for a required key", () => {
+    Object.assign(process.env, REQUIRED);
+    process.env.ANTHROPIC_API_KEY = "   ";
+    expect(() => getEnv()).toThrowError(/ANTHROPIC_API_KEY/);
+  });
+
+  it("rejects a malformed Supabase URL", () => {
+    Object.assign(process.env, REQUIRED);
+    process.env.NEXT_PUBLIC_SUPABASE_URL = "not-a-url";
+    expect(() => getEnv()).toThrowError(/NEXT_PUBLIC_SUPABASE_URL/);
+  });
 });
