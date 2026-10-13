@@ -1,26 +1,32 @@
+@import url('https://fonts.googleapis.com/css2?family=Calistoga&family=Inter:wght@400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
 @import "tailwindcss";
 
-:root {
-  --background: #ffffff;
-  --foreground: #171717;
-}
+@theme {
+  --color-primary: #B4502E;
+  --color-on-primary: #FFFFFF;
+  --color-secondary: #6B7256;
+  --color-on-secondary: #FFFFFF;
+  --color-accent: #B4502E;
+  --color-on-accent: #FFFFFF;
+  --color-background: #FAF7F2;
+  --color-foreground: #2A211C;
+  --color-card: #FFFDF9;
+  --color-card-foreground: #2A211C;
+  --color-muted: #F0E9E1;
+  --color-muted-foreground: #6B6058;
+  --color-border: #E3D8CC;
+  --color-destructive: #DC2626;
+  --color-on-destructive: #FFFFFF;
+  --color-success: #4D7C4D;
+  --color-ring: #B4502E;
 
-@theme inline {
-  --color-background: var(--background);
-  --color-foreground: var(--foreground);
-  --font-sans: var(--font-geist-sans);
-  --font-mono: var(--font-geist-mono);
-}
-
-@media (prefers-color-scheme: dark) {
-  :root {
-    --background: #0a0a0a;
-    --foreground: #ededed;
-  }
+  --font-heading: "Calistoga", Georgia, serif;
+  --font-body: "Inter", sans-serif;
+  --font-data: "JetBrains Mono", monospace;
 }
 
 body {
-  background: var(--background);
-  color: var(--foreground);
-  font-family: Arial, Helvetica, sans-serif;
+  background: var(--color-background);
+  color: var(--color-foreground);
+  font-family: var(--font-body);
 }

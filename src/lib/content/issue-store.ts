@@ -21,18 +21,21 @@ export interface NewIssue {
 export interface IssueRecord extends NewIssue {
   id: string;
   createdAt: string;
+  sentAt: string | null;
 }
 
 export interface IssueStore {
   saveIssue(issue: NewIssue): Promise<string>;
   listIssues(): Promise<IssueRecord[]>;
   getIssue(id: string): Promise<IssueRecord | null>;
+  markSent(id: string): Promise<void>;
 }
 
 export interface IssuesTable {
   insert(issue: NewIssue): Promise<string>;
   selectAll(): Promise<IssueRecord[]>;
   selectById(id: string): Promise<IssueRecord | null>;
+  markSent(id: string): Promise<void>;
 }
 
 export class SupabaseIssueStore implements IssueStore {
@@ -48,6 +51,10 @@ export class SupabaseIssueStore implements IssueStore {
 
   getIssue(id: string): Promise<IssueRecord | null> {
     return this.table.selectById(id);
+  }
+
+  markSent(id: string): Promise<void> {
+    return this.table.markSent(id);
   }
 }
 
@@ -77,6 +84,10 @@ export function createSupabaseIssuesTable(client: SupabaseClient): IssuesTable {
       if (error) throw new Error(`Failed to get issue: ${error.message}`);
       return data ? rowToIssueRecord(data) : null;
     },
+    async markSent(id) {
+      const { error } = await client.from("issues").update({ sent_at: new Date().toISOString() }).eq("id", id);
+      if (error) throw new Error(`Failed to mark issue sent: ${error.message}`);
+    },
   };
 }
 
@@ -88,5 +99,6 @@ function rowToIssueRecord(row: Record<string, unknown>): IssueRecord {
     marketSummary: row.market_summary as string,
     listings: row.listings as StoredListing[],
     createdAt: row.created_at as string,
+    sentAt: (row.sent_at as string | null) ?? null,
   };
 }

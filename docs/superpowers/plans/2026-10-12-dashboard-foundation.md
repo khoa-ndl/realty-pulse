@@ -35,10 +35,10 @@
 **Files:**
 - Create: `src/lib/supabase/client.ts`
 - Create: `src/lib/supabase/server.ts`
-- Create: `src/lib/supabase/middleware.ts`
+- Create: `src/lib/supabase/proxy.ts`
 - Create: `src/lib/auth/route-guard.ts`
 - Test: `src/lib/auth/route-guard.test.ts`
-- Create: `src/middleware.ts`
+- Create: `src/proxy.ts`
 - Create: `src/app/login/page.tsx`
 - Create: `src/app/dashboard/actions.ts`
 - Modify: `src/lib/env.ts`, `src/lib/env.test.ts`, `.env.example` (add `NEXT_PUBLIC_SUPABASE_ANON_KEY`)
@@ -117,7 +117,7 @@ Expected: PASS (5/5)
 
 Run: `pnpm add @supabase/ssr`
 
-- [ ] **Step 7: Implement the three Supabase client wrappers and `src/middleware.ts`**
+- [ ] **Step 7: Implement the three Supabase client wrappers and `src/proxy.ts`**
 
 No tests — thin, direct wiring following the current official `@supabase/ssr` pattern (verify exact method names against the installed package's types; ledger a ruling if they differ from what's sketched here):
 
@@ -125,9 +125,9 @@ No tests — thin, direct wiring following the current official `@supabase/ssr` 
 
 `src/lib/supabase/server.ts` — `createSupabaseServerClient()` (async) using `createServerClient(url, anonKey, { cookies: { getAll, setAll } })` from `@supabase/ssr`, wired to `next/headers`'s `cookies()`.
 
-`src/lib/supabase/middleware.ts` — `updateSession(request: NextRequest): Promise<NextResponse>`: builds a `createServerClient` bound to the request/response cookie pair per `@supabase/ssr`'s documented middleware pattern, calls `supabase.auth.getUser()` to validate/refresh the session, then calls `shouldRedirectTo(request.nextUrl.pathname, !!user)` — if it returns a path, `NextResponse.redirect(new URL(path, request.url))`; otherwise returns the response carrying the refreshed cookies.
+`src/lib/supabase/proxy.ts` — `updateSession(request: NextRequest): Promise<NextResponse>`: builds a `createServerClient` bound to the request/response cookie pair per `@supabase/ssr`'s documented middleware pattern, calls `supabase.auth.getUser()` to validate/refresh the session, then calls `shouldRedirectTo(request.nextUrl.pathname, !!user)` — if it returns a path, `NextResponse.redirect(new URL(path, request.url))`; otherwise returns the response carrying the refreshed cookies.
 
-`src/middleware.ts` — `export async function middleware(request: NextRequest) { return updateSession(request); }` plus `export const config = { matcher: ["/dashboard/:path*", "/login"] }`.
+`src/proxy.ts` — `export async function proxy(request: NextRequest) { return updateSession(request); }` plus `export const config = { matcher: ["/dashboard/:path*", "/login"] }`. (Named `src/middleware.ts`/`export function middleware` in Next.js ≤15; Next.js 16 renamed the convention to `proxy.ts`/`export function proxy` — see the plan's Post-Execution Note.)
 
 - [ ] **Step 8: Implement the login page**
 
@@ -145,7 +145,7 @@ Expected: PASS
 - [ ] **Step 11: Commit**
 
 ```bash
-git add src/lib/supabase/ src/lib/auth/ src/middleware.ts src/app/login/ src/app/dashboard/actions.ts src/lib/env.ts src/lib/env.test.ts .env.example package.json pnpm-lock.yaml
+git add src/lib/supabase/ src/lib/auth/ src/proxy.ts src/app/login/ src/app/dashboard/actions.ts src/lib/env.ts src/lib/env.test.ts .env.example package.json pnpm-lock.yaml
 git commit -m "feat: add Supabase auth and dashboard route protection"
 ```
 
@@ -613,9 +613,13 @@ git commit -m "feat: add Schedule Status dashboard screen"
 
 **Spec coverage:** Covers the spec's Dashboard section's auth requirement and three of its four screens (Issue Archive, Subscribers, Scheduled run status). Generate & Send is the next plan, per the agreed phase split.
 
-**Step scan:** Every step pins an exact file, signature, or test; "no test" call-outs (the three Supabase client wrappers, `src/middleware.ts`, the login page, sign-out action, both `layout.tsx`/page-level Server Components, and the two subscriber server actions) are each thin data-fetching or SDK-wiring code, consistent with this codebase's established pattern (e.g. Phase 1's `env.ts` real wiring, Phase 2's `createGmailClient`).
+**Step scan:** Every step pins an exact file, signature, or test; "no test" call-outs (the three Supabase client wrappers, `src/proxy.ts`, the login page, sign-out action, both `layout.tsx`/page-level Server Components, and the two subscriber server actions) are each thin data-fetching or SDK-wiring code, consistent with this codebase's established pattern (e.g. Phase 1's `env.ts` real wiring, Phase 2's `createGmailClient`).
 
-**Type consistency:** `IssueRecord` (Phase 3b) is used identically across Tasks 3 and 5. `SubscriberRecord` (Phase 2) is used identically in Task 4's test and component. `shouldRedirectTo` (Task 1) is the only cross-task interface within this plan, consumed by `src/middleware.ts` in the same task.
+**Type consistency:** `IssueRecord` (Phase 3b) is used identically across Tasks 3 and 5. `SubscriberRecord` (Phase 2) is used identically in Task 4's test and component. `shouldRedirectTo` (Task 1) is the only cross-task interface within this plan, consumed by `src/proxy.ts` in the same task.
+
+## Post-Execution Note
+
+The plan was written against Next.js's long-standing `middleware.ts` convention. The installed Next.js 16.4.0 deprecated it in favor of a renamed `proxy.ts` file with an exported `proxy` function — confirmed from the installed package's own docs, and from an explicit build-time deprecation warning on the old name. All `middleware.ts` references above mean `proxy.ts` (and `export function middleware` means `export function proxy`) — paths were corrected after the fact; see the plan's ledger for the full ruling.
 
 **Review Focus:** all five lines have an owning task and an automated test (route-guard's five cases, the subscriber form's validation-error case, each list/status component's empty-state test, and the sidebar's five active-state cases, including the not-yet-built Generate & Send route).
 
