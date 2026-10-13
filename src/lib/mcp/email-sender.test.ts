@@ -22,7 +22,7 @@ describe("GmailEmailSender", () => {
     const sender = new GmailEmailSender(client);
     await sender.sendEmail("a@example.com", "Hi there", "<p>hello</p>");
     expect(client.sendRawMessage).toHaveBeenCalledTimes(1);
-    const raw = (client.sendRawMessage as any).mock.calls[0][0];
+    const raw = vi.mocked(client.sendRawMessage).mock.calls[0][0];
     expect(decode(raw)).toContain("To: a@example.com");
   });
 });

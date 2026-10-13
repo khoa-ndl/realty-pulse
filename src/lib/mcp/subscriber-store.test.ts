@@ -26,7 +26,7 @@ describe("SupabaseSubscriberStore", () => {
 
   it("listSubscribers delegates to table.selectActive", async () => {
     const table = makeFakeTable();
-    (table.selectActive as any).mockResolvedValue([
+    vi.mocked(table.selectActive).mockResolvedValue([
       { email: "a@example.com", source: null, subscribedAt: "2026-01-01T00:00:00Z" },
     ]);
     const store = new SupabaseSubscriberStore(table);
