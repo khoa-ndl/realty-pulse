@@ -14,6 +14,7 @@ const schema = z.object({
   MCP_OUTBOUND_TOKEN: nonBlank,
   NEXT_PUBLIC_APP_URL: nonBlank.pipe(z.url()),
   NEXT_PUBLIC_SUPABASE_ANON_KEY: nonBlank,
+  CRON_SECRET: nonBlank,
 });
 
 export type Env = z.infer<typeof schema>;
