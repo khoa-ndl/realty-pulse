@@ -1,5 +1,6 @@
 import Link from "next/link";
 import type { IssueRecord } from "@/lib/content/issue-store";
+import { formatPacificDateTime } from "@/lib/dashboard/format-pacific-date";
 
 export function IssueList({ issues }: { issues: IssueRecord[] }) {
   if (issues.length === 0) {
@@ -16,7 +17,7 @@ export function IssueList({ issues }: { issues: IssueRecord[] }) {
         <thead>
           <tr>
             <th className="border-b border-[var(--color-border)] px-4 py-3 text-left font-[family-name:var(--font-data)] text-xs uppercase tracking-wide text-[var(--color-muted-foreground)]">
-              Sent
+              Generated
             </th>
             <th className="border-b border-[var(--color-border)] px-4 py-3 text-left font-[family-name:var(--font-data)] text-xs uppercase tracking-wide text-[var(--color-muted-foreground)]">
               Trigger
@@ -34,7 +35,7 @@ export function IssueList({ issues }: { issues: IssueRecord[] }) {
           {issues.map((issue) => (
             <tr key={issue.id}>
               <td className="border-b border-[var(--color-border)] px-4 py-4 text-sm">
-                {new Date(issue.createdAt).toLocaleString()}
+                {formatPacificDateTime(issue.createdAt)}
               </td>
               <td className="border-b border-[var(--color-border)] px-4 py-4 text-sm">
                 <span

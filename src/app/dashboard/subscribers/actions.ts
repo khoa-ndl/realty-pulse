@@ -4,6 +4,7 @@ import { revalidatePath } from "next/cache";
 import { connectOutboundMcpClient } from "@/lib/mcp/client";
 import { parseAddSubscriberForm } from "@/lib/dashboard/subscriber-form";
 import { getEnv } from "@/lib/env";
+import { requireUser } from "@/lib/auth/require-user";
 
 async function mcpClient() {
   const env = getEnv();
@@ -11,6 +12,8 @@ async function mcpClient() {
 }
 
 export async function addSubscriberAction(formData: FormData) {
+  await requireUser();
+
   const parsed = parseAddSubscriberForm(formData);
   if ("error" in parsed) return parsed;
 
@@ -21,6 +24,8 @@ export async function addSubscriberAction(formData: FormData) {
 }
 
 export async function removeSubscribersAction(emails: string[]): Promise<void> {
+  await requireUser();
+
   const client = await mcpClient();
   await Promise.all(emails.map((email) => client.removeSubscriber(email)));
   revalidatePath("/dashboard/subscribers");

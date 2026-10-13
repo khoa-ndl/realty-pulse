@@ -1,4 +1,5 @@
 import type { IssueRecord } from "@/lib/content/issue-store";
+import { formatPacificDateTime } from "@/lib/dashboard/format-pacific-date";
 
 export function ScheduleStatus({
   scheduledIssues,
@@ -20,10 +21,10 @@ export function ScheduleStatus({
             <>
               <div className="mb-1 flex items-center gap-2.5">
                 <span className="font-[family-name:var(--font-heading)] text-xl text-[var(--color-foreground)]">
-                  {new Date(lastRun.createdAt).toLocaleString()}
+                  {formatPacificDateTime(lastRun.createdAt)}
                 </span>
-                <span className="rounded-full bg-[#E6EFE6] px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold text-[var(--color-success)]">
-                  Sent
+                <span className="rounded-full bg-[var(--color-muted)] px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold text-[var(--color-muted-foreground)]">
+                  Generated
                 </span>
               </div>
               <p className="text-sm text-[var(--color-muted-foreground)]">
@@ -39,7 +40,7 @@ export function ScheduleStatus({
             Next scheduled run
           </p>
           <span className="font-[family-name:var(--font-heading)] text-xl text-[var(--color-foreground)]">
-            {nextRun.toLocaleString()}
+            {formatPacificDateTime(nextRun)}
           </span>
         </div>
       </div>
@@ -52,7 +53,7 @@ export function ScheduleStatus({
                   Run
                 </th>
                 <th className="border-b border-[var(--color-border)] px-4 py-3 text-left font-[family-name:var(--font-data)] text-xs uppercase tracking-wide text-[var(--color-muted-foreground)]">
-                  Outcome
+                  Status
                 </th>
                 <th className="border-b border-[var(--color-border)] px-4 py-3 text-left font-[family-name:var(--font-data)] text-xs uppercase tracking-wide text-[var(--color-muted-foreground)]">
                   Listings
@@ -63,11 +64,11 @@ export function ScheduleStatus({
               {scheduledIssues.slice(0, 5).map((issue) => (
                 <tr key={issue.id}>
                   <td className="border-b border-[var(--color-border)] px-4 py-3 text-sm">
-                    {new Date(issue.createdAt).toLocaleString()}
+                    {formatPacificDateTime(issue.createdAt)}
                   </td>
                   <td className="border-b border-[var(--color-border)] px-4 py-3 text-sm">
-                    <span className="rounded-full bg-[#E6EFE6] px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold text-[var(--color-success)]">
-                      Sent
+                    <span className="rounded-full bg-[var(--color-muted)] px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold text-[var(--color-muted-foreground)]">
+                      Generated
                     </span>
                   </td>
                   <td className="border-b border-[var(--color-border)] px-4 py-3 text-sm">{issue.listings.length}</td>

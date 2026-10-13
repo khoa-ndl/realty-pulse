@@ -31,4 +31,14 @@ describe("Sidebar", () => {
     render(<Sidebar currentPath="/dashboard" />);
     expect(screen.getByRole("link", { name: /generate.*send/i })).toHaveAttribute("aria-current", "page");
   });
+
+  it("marks the Issue Archive item active for a nested detail route like /dashboard/archive/abc123", () => {
+    render(<Sidebar currentPath="/dashboard/archive/abc123" />);
+    expect(screen.getByRole("link", { name: /issue archive/i })).toHaveAttribute("aria-current", "page");
+  });
+
+  it("does not mark Generate & Send active for a nested route, even though /dashboard is a prefix of every path", () => {
+    render(<Sidebar currentPath="/dashboard/archive" />);
+    expect(screen.getByRole("link", { name: /generate.*send/i })).not.toHaveAttribute("aria-current");
+  });
 });

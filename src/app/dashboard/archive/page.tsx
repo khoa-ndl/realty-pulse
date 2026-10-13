@@ -2,8 +2,10 @@ import { createClient } from "@supabase/supabase-js";
 import { createSupabaseIssuesTable, SupabaseIssueStore } from "@/lib/content/issue-store";
 import { IssueList } from "@/components/dashboard/issue-list";
 import { getEnv } from "@/lib/env";
+import { requireUser } from "@/lib/auth/require-user";
 
 export default async function ArchivePage() {
+  await requireUser();
   const env = getEnv();
   const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY);
   const store = new SupabaseIssueStore(createSupabaseIssuesTable(supabase));

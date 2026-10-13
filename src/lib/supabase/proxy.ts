@@ -27,7 +27,10 @@ export async function updateSession(request: NextRequest): Promise<NextResponse>
 
   const redirectPath = shouldRedirectTo(request.nextUrl.pathname, !!user);
   if (redirectPath) {
-    return NextResponse.redirect(new URL(redirectPath, request.url));
+    const redirectResponse = NextResponse.redirect(new URL(redirectPath, request.url));
+    response.cookies.getAll().forEach((cookie) => redirectResponse.cookies.set(cookie));
+    response.headers.forEach((value, key) => redirectResponse.headers.set(key, value));
+    return redirectResponse;
   }
 
   return response;

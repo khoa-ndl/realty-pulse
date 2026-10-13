@@ -2,13 +2,15 @@ import type { NextConfig } from "next";
 
 const nextConfig: NextConfig = {
   /* config options here */
-  // Cache Components requires every session-reading page to adopt a
-  // Suspense + `use cache: private` streaming-auth pattern (see Next's own
-  // "authentication-with-cache-components" guide) to avoid build-time
-  // prerender failures. That's a real architectural commitment this project
-  // hasn't made — the dashboard is an internal, auth-gated admin tool with
-  // a handful of screens, not a consumer app where instant navigation is a
-  // stated goal. Disabled rather than worked around per-page.
+  // Cache Components treats a session/data read with no Suspense boundary
+  // as a build-time prerender failure. The actual minimum fix (per Next's
+  // own "authentication-with-cache-components" guide) is just a Suspense
+  // boundary around the session read, plus `connection()` in each data
+  // page — `use cache: private` and a promise-context provider are only
+  // needed for instant navigation and server-side caching, neither of
+  // which matters on an internal, auth-gated admin tool with a handful of
+  // screens that one person checks occasionally. Disabled rather than
+  // adopting that machinery for a payoff that doesn't apply here.
   // partialPrefetching requires cacheComponents, so it's disabled too.
   turbopack: {
     rules: {

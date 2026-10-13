@@ -2,6 +2,7 @@
 
 import { useState } from "react";
 import type { SubscriberRecord } from "@/lib/mcp/subscriber-store";
+import { formatPacificDate } from "@/lib/dashboard/format-pacific-date";
 
 export function SubscriberList({
   subscribers,
@@ -82,7 +83,7 @@ export function SubscriberList({
                   {subscriber.source ?? "—"}
                 </td>
                 <td className="border-b border-[var(--color-border)] px-4 py-3 text-sm">
-                  {new Date(subscriber.subscribedAt).toLocaleDateString()}
+                  {formatPacificDate(subscriber.subscribedAt)}
                 </td>
                 <td className="border-b border-[var(--color-border)] px-4 py-3 text-sm">
                   <span className="rounded-full bg-[#E6EFE6] px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold text-[var(--color-success)]">

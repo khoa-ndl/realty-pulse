@@ -3,8 +3,10 @@ import { createSupabaseIssuesTable, SupabaseIssueStore } from "@/lib/content/iss
 import { nextScheduledRun } from "@/lib/dashboard/next-scheduled-run";
 import { ScheduleStatus } from "@/components/dashboard/schedule-status";
 import { getEnv } from "@/lib/env";
+import { requireUser } from "@/lib/auth/require-user";
 
 export default async function SchedulePage() {
+  await requireUser();
   const env = getEnv();
   const supabase = createClient(env.NEXT_PUBLIC_SUPABASE_URL, env.SUPABASE_SERVICE_ROLE_KEY);
   const store = new SupabaseIssueStore(createSupabaseIssuesTable(supabase));

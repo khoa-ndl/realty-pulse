@@ -64,7 +64,8 @@ export function Sidebar({ currentPath }: { currentPath: string }) {
       </div>
       <div className="flex flex-col gap-1">
         {NAV_ITEMS.map((item) => {
-          const isActive = currentPath === item.href;
+          const isActive =
+            currentPath === item.href || (item.href !== "/dashboard" && currentPath.startsWith(`${item.href}/`));
           return (
             <Link
               key={item.href}
