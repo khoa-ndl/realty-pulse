@@ -6,6 +6,8 @@ export interface OutboundMcpClient {
   listSubscribers(): Promise<SubscriberRecord[]>;
   removeSubscriber(email: string): Promise<void>;
   sendEmail(to: string, subject: string, html: string): Promise<void>;
+  addPendingSubscriber(email: string, token: string, source?: string): Promise<"created" | "already-active">;
+  confirmSubscriber(token: string): Promise<string | null>;
 }
 
 function assertNotError(result: {
@@ -38,6 +40,16 @@ export async function connectOutboundMcpClient(baseUrl: string, token: string): 
     },
     async sendEmail(to, subject, html) {
       assertNotError(await client.callTool({ name: "send_email", arguments: { to, subject, html } }));
+    },
+    async addPendingSubscriber(email, token, source) {
+      const result = await client.callTool({ name: "add_pending_subscriber", arguments: { email, token, source } });
+      assertNotError(result);
+      return (result.structuredContent as { status: "created" | "already-active" }).status;
+    },
+    async confirmSubscriber(token) {
+      const result = await client.callTool({ name: "confirm_subscriber", arguments: { token } });
+      assertNotError(result);
+      return (result.structuredContent as { email: string | null }).email;
     },
   };
 }
