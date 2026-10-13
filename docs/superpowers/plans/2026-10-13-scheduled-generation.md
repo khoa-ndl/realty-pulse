@@ -22,7 +22,7 @@ This plan also closes a gap the cron feature would otherwise create: once an iss
 
 ## Review Focus
 
-- A cron invocation on a day/time that isn't yet due (e.g. Tuesday, or Monday before 9am PT) must do nothing — no issue generated, no error.
+- A cron invocation on a day/time that isn't yet due (e.g. Tuesday, or Monday before 9am PT, *given this week's scheduled issue already exists*) must do nothing — no issue generated, no error. This deliberately does not apply when no scheduled issue exists yet at all (first deploy, or a prior week's run failed outright) — `shouldRunScheduledGeneration` treats that as due immediately on any day, which is the intended catch-up behavior a daily-frequency cron relies on, not a bug.
 - A cron invocation without the correct `CRON_SECRET` bearer token must be rejected (401), never allowed to trigger generation.
 - Two cron invocations within the same scheduled week (e.g. a Vercel retry, or the daily check firing again the next day before a human has acted) must not produce two scheduled issues for that week.
 - The DST transition itself (so the "9am PT" boundary is computed correctly across the March/November changeover, not just working "most of the year") — covered by reusing `next-scheduled-run.ts`'s already-DST-tested offset logic, extended with its own tests for the new function.
