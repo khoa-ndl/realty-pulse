@@ -88,7 +88,7 @@ export function createOutboundServer(store: SubscriberStore, sender: EmailSender
     {
       description: "Register a pending subscriber who must confirm via email before receiving sends",
       inputSchema: z.object({ email: normalizedEmail, source: z.string().optional(), token: z.string().min(1) }),
-      outputSchema: z.object({ status: z.enum(["created", "already-active"]) }),
+      outputSchema: z.object({ status: z.enum(["created", "skipped"]) }),
     },
     wrapToolHandler(async ({ email, source, token }) => {
       const status = await store.addPendingSubscriber(email, token, source);

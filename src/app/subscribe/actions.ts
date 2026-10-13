@@ -19,6 +19,10 @@ export async function subscribeAction(email: string): Promise<{ success: true } 
 
     return { success: true };
   } catch (error) {
-    return { error: error instanceof Error ? error.message : "Subscription failed." };
+    // Generic message for this anonymous, public action -- the real
+    // error (which could be internal Supabase/MCP detail) goes to the
+    // server log only, not to whoever is on the other end of the form.
+    console.error("[subscribeAction]", error);
+    return { error: "Something went wrong. Please try again." };
   }
 }

@@ -52,22 +52,50 @@ describe("SupabaseSubscriberStore", () => {
     expect(table.insertPending).toHaveBeenCalledWith("new@example.com", "tok-1", null);
   });
 
-  it('addPendingSubscriber returns "already-active" and does not insert when the email is already an active subscriber', async () => {
+  it('addPendingSubscriber returns "skipped" and does not insert when the email is already an active subscriber', async () => {
     const table = makeFakeTable();
-    table.selectByEmail = vi.fn().mockResolvedValue({ confirmedAt: "2026-01-01T00:00:00Z", unsubscribedAt: null });
+    table.selectByEmail = vi
+      .fn()
+      .mockResolvedValue({ confirmedAt: "2026-01-01T00:00:00Z", unsubscribedAt: null, subscribedAt: "2026-01-01T00:00:00Z" });
     const store = new SupabaseSubscriberStore(table);
-    await expect(store.addPendingSubscriber("active@example.com", "tok-2")).resolves.toBe("already-active");
+    await expect(store.addPendingSubscriber("active@example.com", "tok-2")).resolves.toBe("skipped");
     expect(table.insertPending).not.toHaveBeenCalled();
   });
 
   it("addPendingSubscriber treats a previously-unsubscribed email as a fresh pending signup", async () => {
     const table = makeFakeTable();
-    table.selectByEmail = vi
-      .fn()
-      .mockResolvedValue({ confirmedAt: "2026-01-01T00:00:00Z", unsubscribedAt: "2026-02-01T00:00:00Z" });
+    table.selectByEmail = vi.fn().mockResolvedValue({
+      confirmedAt: "2026-01-01T00:00:00Z",
+      unsubscribedAt: "2026-02-01T00:00:00Z",
+      subscribedAt: "2026-01-01T00:00:00Z",
+    });
     const store = new SupabaseSubscriberStore(table);
     await expect(store.addPendingSubscriber("backagain@example.com", "tok-3")).resolves.toBe("created");
     expect(table.insertPending).toHaveBeenCalledWith("backagain@example.com", "tok-3", null);
+  });
+
+  it('addPendingSubscriber returns "skipped" without inserting a new token when a pending signup was created moments ago', async () => {
+    const table = makeFakeTable();
+    table.selectByEmail = vi.fn().mockResolvedValue({
+      confirmedAt: null,
+      unsubscribedAt: null,
+      subscribedAt: new Date().toISOString(),
+    });
+    const store = new SupabaseSubscriberStore(table);
+    await expect(store.addPendingSubscriber("justsignedup@example.com", "tok-5")).resolves.toBe("skipped");
+    expect(table.insertPending).not.toHaveBeenCalled();
+  });
+
+  it("addPendingSubscriber issues a fresh token once a prior pending signup's cooldown has expired", async () => {
+    const table = makeFakeTable();
+    table.selectByEmail = vi.fn().mockResolvedValue({
+      confirmedAt: null,
+      unsubscribedAt: null,
+      subscribedAt: new Date(Date.now() - 10 * 60 * 1000).toISOString(),
+    });
+    const store = new SupabaseSubscriberStore(table);
+    await expect(store.addPendingSubscriber("stillwaiting@example.com", "tok-6")).resolves.toBe("created");
+    expect(table.insertPending).toHaveBeenCalledWith("stillwaiting@example.com", "tok-6", null);
   });
 
   it("confirmSubscriber delegates to table.confirmByToken", async () => {

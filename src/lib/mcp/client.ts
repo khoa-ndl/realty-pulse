@@ -6,7 +6,7 @@ export interface OutboundMcpClient {
   listSubscribers(): Promise<SubscriberRecord[]>;
   removeSubscriber(email: string): Promise<void>;
   sendEmail(to: string, subject: string, html: string): Promise<void>;
-  addPendingSubscriber(email: string, token: string, source?: string): Promise<"created" | "already-active">;
+  addPendingSubscriber(email: string, token: string, source?: string): Promise<"created" | "skipped">;
   confirmSubscriber(token: string): Promise<string | null>;
 }
 
@@ -44,7 +44,7 @@ export async function connectOutboundMcpClient(baseUrl: string, token: string): 
     async addPendingSubscriber(email, token, source) {
       const result = await client.callTool({ name: "add_pending_subscriber", arguments: { email, token, source } });
       assertNotError(result);
-      return (result.structuredContent as { status: "created" | "already-active" }).status;
+      return (result.structuredContent as { status: "created" | "skipped" }).status;
     },
     async confirmSubscriber(token) {
       const result = await client.callTool({ name: "confirm_subscriber", arguments: { token } });
