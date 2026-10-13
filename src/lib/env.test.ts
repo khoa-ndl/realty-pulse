@@ -11,6 +11,7 @@ const REQUIRED: Record<string, string> = {
   GMAIL_CLIENT_SECRET: "test",
   GMAIL_REFRESH_TOKEN: "test",
   MCP_OUTBOUND_TOKEN: "test",
+  NEXT_PUBLIC_APP_URL: "http://localhost:3000",
 };
 
 describe("getEnv", () => {
