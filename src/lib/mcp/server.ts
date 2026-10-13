@@ -5,6 +5,24 @@ import type { EmailSender } from "./email-sender";
 
 type ToolResult = { content: Array<{ type: "text"; text: string }>; structuredContent?: unknown };
 
+const normalizedEmail = z
+  .string()
+  .trim()
+  .transform((s) => s.toLowerCase())
+  .pipe(z.email());
+
+export function requireBearerToken(
+  handler: (req: Request) => Promise<Response>,
+  token: string
+): (req: Request) => Promise<Response> {
+  return async (req: Request) => {
+    if (req.headers.get("authorization") !== `Bearer ${token}`) {
+      return new Response("Unauthorized", { status: 401 });
+    }
+    return handler(req);
+  };
+}
+
 function wrapToolHandler<Args>(fn: (args: Args) => Promise<ToolResult>) {
   return async (args: Args) => {
     try {
@@ -25,7 +43,7 @@ export function createOutboundServer(store: SubscriberStore, sender: EmailSender
     "add_subscriber",
     {
       description: "Add an email to the active subscriber list",
-      inputSchema: z.object({ email: z.string().email(), source: z.string().optional() }),
+      inputSchema: z.object({ email: normalizedEmail, source: z.string().optional() }),
     },
     wrapToolHandler(async ({ email, source }) => {
       await store.addSubscriber(email, source);
@@ -57,7 +75,7 @@ export function createOutboundServer(store: SubscriberStore, sender: EmailSender
     "remove_subscriber",
     {
       description: "Unsubscribe an email from the active subscriber list",
-      inputSchema: z.object({ email: z.string().email() }),
+      inputSchema: z.object({ email: normalizedEmail }),
     },
     wrapToolHandler(async ({ email }) => {
       await store.removeSubscriber(email);

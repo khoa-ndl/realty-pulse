@@ -10,6 +10,7 @@ const REQUIRED: Record<string, string> = {
   GMAIL_CLIENT_ID: "test",
   GMAIL_CLIENT_SECRET: "test",
   GMAIL_REFRESH_TOKEN: "test",
+  MCP_OUTBOUND_TOKEN: "test",
 };
 
 describe("getEnv", () => {

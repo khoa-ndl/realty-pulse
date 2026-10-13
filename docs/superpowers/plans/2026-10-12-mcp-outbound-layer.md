@@ -510,8 +510,8 @@ Not automated — each needs an account action or a browser the agent doesn't ha
 
 1. Apply `supabase/migrations/0001_subscribers.sql` via the Supabase Dashboard SQL Editor for project `qrfaaegrnzkysimiafwa`.
 2. Follow [docs/gmail-oauth-setup.md](../../gmail-oauth-setup.md) to get `GMAIL_CLIENT_ID`/`GMAIL_CLIENT_SECRET`/`GMAIL_REFRESH_TOKEN`.
-3. Copy `.env.example` to `.env` and fill in the Supabase URL/service role key (already known — see this session's own notes) and the three Gmail values.
-4. `pnpm dev`, then call `POST http://localhost:3000/api/mcp/outbound` with a real MCP client (or a one-off script using `connectOutboundMcpClient`) to confirm `add_subscriber` writes a real row and `send_email` delivers a real message.
+3. Copy `.env.example` to `.env` and fill in the Supabase URL/service role key (already known — see this session's own notes), the three Gmail values, and a `MCP_OUTBOUND_TOKEN` (generate with `openssl rand -hex 32`) — the final review added bearer-token auth to the route (see ledger), since an unauthenticated outbound-email/subscriber-dump endpoint was a Critical finding.
+4. `pnpm dev`, then call `POST http://localhost:3000/api/mcp/outbound` with a real MCP client passing `Authorization: Bearer <MCP_OUTBOUND_TOKEN>` (or a one-off script using `connectOutboundMcpClient(url, token)`) to confirm `add_subscriber` writes a real row and `send_email` delivers a real message.
 
 ## Self-Review
 

@@ -11,6 +11,7 @@ const schema = z.object({
   GMAIL_CLIENT_ID: nonBlank,
   GMAIL_CLIENT_SECRET: nonBlank,
   GMAIL_REFRESH_TOKEN: nonBlank,
+  MCP_OUTBOUND_TOKEN: nonBlank,
 });
 
 export type Env = z.infer<typeof schema>;

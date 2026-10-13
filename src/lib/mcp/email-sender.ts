@@ -10,9 +10,11 @@ export interface GmailClient {
 }
 
 export function buildRawMimeMessage(opts: { to: string; subject: string; html: string }): string {
+  const encodedSubject = `=?UTF-8?B?${Buffer.from(opts.subject, "utf-8").toString("base64")}?=`;
   const message = [
     `To: ${opts.to}`,
-    `Subject: ${opts.subject}`,
+    `Subject: ${encodedSubject}`,
+    "MIME-Version: 1.0",
     "Content-Type: text/html; charset=utf-8",
     "",
     opts.html,

@@ -18,9 +18,11 @@ function assertNotError(result: {
   }
 }
 
-export async function connectOutboundMcpClient(baseUrl: string): Promise<OutboundMcpClient> {
+export async function connectOutboundMcpClient(baseUrl: string, token: string): Promise<OutboundMcpClient> {
   const client = new Client({ name: "realty-pulse-app", version: "0.1.0" });
-  await client.connect(new StreamableHTTPClientTransport(new URL(baseUrl)));
+  await client.connect(
+    new StreamableHTTPClientTransport(new URL(baseUrl), { authProvider: { token: async () => token } })
+  );
 
   return {
     async addSubscriber(email, source) {
