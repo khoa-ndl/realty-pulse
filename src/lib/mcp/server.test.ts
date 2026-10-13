@@ -39,6 +39,12 @@ function makeFakeStore() {
       const row = rows.get(email);
       if (row) row.unsubscribedAt = new Date().toISOString();
     },
+    async addPendingSubscriber() {
+      return "created";
+    },
+    async confirmSubscriber() {
+      return null;
+    },
   };
   return store;
 }
