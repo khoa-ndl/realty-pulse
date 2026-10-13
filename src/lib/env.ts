@@ -13,6 +13,7 @@ const schema = z.object({
   GMAIL_REFRESH_TOKEN: nonBlank,
   MCP_OUTBOUND_TOKEN: nonBlank,
   NEXT_PUBLIC_APP_URL: nonBlank.pipe(z.url()),
+  NEXT_PUBLIC_SUPABASE_ANON_KEY: nonBlank,
 });
 
 export type Env = z.infer<typeof schema>;
