@@ -25,7 +25,7 @@
 - A Claude API call fails — same: a clear thrown error, not silently-empty copy shipped to subscribers.
 - A kie.ai generation task reaches `state: "fail"` — the image generator must throw a clear error, not return an empty or broken URL array that a later phase renders as a dead image.
 - A kie.ai generation task never leaves `state: "waiting"` — polling must give up after a bounded number of attempts, not hang the whole pipeline indefinitely.
-- The listing generator must never produce a price, beds, baths, or sqft value outside its documented plausible range — undermines the portfolio demo's credibility if a generated listing looks absurd (e.g. a 1-bed condo at 9,000 sqft).
+- The listing generator must never produce a price, beds, baths, or sqft value outside its documented plausible range — undermines the product's credibility if a generated listing looks absurd (e.g. a 1-bed condo at 9,000 sqft).
 
 ---
 

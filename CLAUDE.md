@@ -1,7 +1,6 @@
 # RealtyPulse — Project Conventions
 
-Portfolio project: an AI-driven weekly newsletter pipeline for a fictional
-real-estate brokerage. Full design: [docs/superpowers/specs/2026-10-12-realty-pulse-newsletter-design.md](docs/superpowers/specs/2026-10-12-realty-pulse-newsletter-design.md).
+An AI-driven weekly newsletter platform for real-estate brokerages. Full design: [docs/superpowers/specs/2026-10-12-realty-pulse-newsletter-design.md](docs/superpowers/specs/2026-10-12-realty-pulse-newsletter-design.md).
 
 ## Commands
 
@@ -19,9 +18,17 @@ real-estate brokerage. Full design: [docs/superpowers/specs/2026-10-12-realty-pu
   fails if the two drift apart.
 - Node version is pinned in `.nvmrc`; keep `package.json`'s
   `engines.node` in sync with it.
+- External API clients (Gmail, Supabase, Perplexity, Anthropic, kie.ai)
+  are each wrapped behind an interface with an injectable seam (`fetch`,
+  or a minimal client wrapper), so request-building and response-parsing
+  logic is unit-tested against fakes. The real wiring factory itself
+  (e.g. `createGmailClient`, `createSupabaseSubscribersTable`) is thin
+  and untested by design — that's exercised by the Manual Verification
+  steps in each phase's plan doc instead.
 
 ## Current phase
 
-Scaffold complete (Next.js + pnpm + Vitest + env validation). Next:
-the outbound MCP layer (`send_email`, `add_subscriber`, `list_subscribers`,
-`remove_subscriber` tools; default Gmail + Supabase implementation).
+Scaffold, the outbound MCP layer (Gmail + Supabase), and the full content
+pipeline (listings, research, copywriting, images, issue assembly and
+storage) are complete. Next: the operator dashboard (generate & send,
+issue archive, subscriber management, scheduled-run status).

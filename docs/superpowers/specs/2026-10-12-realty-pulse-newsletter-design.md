@@ -2,21 +2,19 @@
 
 ## Intent
 
-A project demonstrating a full AI content pipeline: a fictional
-residential real-estate brokerage ("RealtyPulse" — working name, Khoa's
-call, open to change) sends its buyer/seller clients a weekly newsletter
-that is researched, written, illustrated, and sent with no manual
-authoring. The point of the portfolio piece is to show a prospective
-client the whole mechanism working end-to-end — synthetic data standing
-in for their real MLS feed, real market research giving the content
-substance, AI-written copy, AI-generated property imagery, and a
-dashboard they could imagine operating themselves.
+RealtyPulse ("RealtyPulse" — working name)
+is a residential real-estate brokerage's weekly newsletter, fully
+automated end to end: researched, written, illustrated, and sent with no
+manual authoring. Synthetic listing data stands in for a brokerage's real
+MLS feed until a licensed feed is connected; real market research gives
+the content substance; copy and property imagery are AI-generated; and an
+operator dashboard lets brokerage staff trigger, preview, and monitor
+sends themselves.
 
-A secondary, explicit goal: the outbound integration layer (email
-sending, subscriber management) is built as swappable MCP servers, so
-when pitching a real client, their existing email provider or CRM can be
-plugged in without touching the core pipeline. This is itself part of
-the pitch — "bring your own stack."
+A core design goal: the outbound integration layer (email sending,
+subscriber management) is built as swappable MCP servers, so a
+brokerage's existing email provider or CRM can be plugged in without
+touching the core pipeline — bring your own stack.
 
 ## Audience & Voice
 
@@ -60,10 +58,11 @@ warm, locally informed.
 ## Anti-Goals (would make this a failure even if "working")
 
 - Scraping real listing sites (e.g. Zillow) for data. Explicitly
-  rejected: violates Zillow's Terms of Service and is a bad look to
-  demo to a prospective client. If real data is ever wanted, the path
-  in is a licensed MLS/RESO feed or a data provider (e.g. SimplyRETS,
-  ATTOM), via the same adapter shape — not scraping.
+  rejected: violates Zillow's Terms of Service and is a legal and
+  reputational liability for any brokerage running this product. If
+  real data is ever wanted, the path in is a licensed MLS/RESO feed or
+  a data provider (e.g. SimplyRETS, ATTOM), via the same adapter shape —
+  not scraping.
 - AI-generated images used as literal data charts/infographics — image
   models render numbers and bars unreliably. Numeric data (price, beds,
   baths, sqft) is always a real HTML/CSS component, never baked into a
@@ -92,7 +91,7 @@ Each issue contains:
    - Claude-written listing copy/blurb.
 3. Standard branded chrome: header/logo, footer with unsubscribe link
    and physical-address-style placeholder (matches real newsletter
-   conventions, reinforces portfolio polish).
+   conventions and CAN-SPAM requirements).
 
 Listings are a fresh random batch every issue — no persistence or
 week-to-week continuity.
@@ -145,11 +144,11 @@ week-to-week continuity.
   listings, research summary used).
 - **Subscribers**: list view, add/remove, signup source/date.
 - **Scheduled run status**: shows last/next scheduled send and its
-  outcome (for demo credibility — "yes, the Monday job actually ran").
+  outcome (operational visibility — confirms the Monday job actually ran).
 
 ## Branding
 
-Fictional brand direction is Khoa's creative call, to be made concrete
+Brand direction is Khoa's creative call, to be made concrete
 during the UI/visual design pass (ui-ux-pro-max + brand asset
 generation), not rigidly fixed here. Working name: **RealtyPulse**.
 Direction: modern, warm-trustworthy, editorial real-estate aesthetic —
