@@ -30,6 +30,14 @@ describe("GenerateAndSend", () => {
     expect(await screen.findByText(/sent to 214 subscribers/i)).toBeInTheDocument();
   });
 
+  it("re-enables the Generate button if onGenerate itself rejects (not just returns an error)", async () => {
+    const onGenerate = vi.fn().mockRejectedValue(new Error("network error"));
+    render(<GenerateAndSend subscriberCount={214} onGenerate={onGenerate} onSend={vi.fn()} />);
+    await userEvent.click(screen.getByRole("button", { name: /generate preview/i }));
+    await expect(onGenerate).toHaveBeenCalled();
+    expect(screen.getByRole("button", { name: /generate preview/i })).toBeEnabled();
+  });
+
   it('returns to idle on "Generate another" from the sent state', async () => {
     const onGenerate = vi.fn().mockResolvedValue({ issueId: "issue-1", html: "<html>preview</html>" });
     const onSend = vi.fn().mockResolvedValue({ sent: 214 });

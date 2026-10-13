@@ -23,28 +23,38 @@ export function GenerateAndSend({
   async function handleGenerate() {
     setPending(true);
     setError(null);
-    const result = await onGenerate();
-    setPending(false);
-    if ("error" in result) {
-      setError(result.error);
-      return;
+    try {
+      const result = await onGenerate();
+      if ("error" in result) {
+        setError(result.error);
+        return;
+      }
+      setIssue(result);
+      setStep("preview");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Generation failed.");
+    } finally {
+      setPending(false);
     }
-    setIssue(result);
-    setStep("preview");
   }
 
   async function handleSend() {
     if (!issue) return;
     setPending(true);
     setError(null);
-    const result = await onSend(issue.issueId);
-    setPending(false);
-    if ("error" in result) {
-      setError(result.error);
-      return;
+    try {
+      const result = await onSend(issue.issueId);
+      if ("error" in result) {
+        setError(result.error);
+        return;
+      }
+      setSentCount(result.sent);
+      setStep("sent");
+    } catch (err) {
+      setError(err instanceof Error ? err.message : "Send failed.");
+    } finally {
+      setPending(false);
     }
-    setSentCount(result.sent);
-    setStep("sent");
   }
 
   function handleStartOver() {
