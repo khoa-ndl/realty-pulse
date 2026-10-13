@@ -1,0 +1,7 @@
+<svg width="220" height="48" viewBox="0 0 220 48" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <g>
+    <path d="M24 6L44 20V40C44 41.1046 43.1046 42 42 42H6C4.89543 42 4 41.1046 4 40V20L24 6Z" fill="#B4502E"/>
+    <path d="M6 26H15L18 19L24 34L27 26H42" stroke="#FAF7F2" stroke-width="2.6" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+  </g>
+  <text x="56" y="31" font-family="Calistoga, Georgia, serif" font-size="24" fill="#2A211C">RealtyPulse</text>
+</svg>

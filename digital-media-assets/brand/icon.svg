@@ -1,0 +1,6 @@
+<svg width="64" height="64" viewBox="0 0 64 64" fill="none" xmlns="http://www.w3.org/2000/svg">
+  <!-- House silhouette -->
+  <path d="M32 8L56 26V54C56 55.1046 55.1046 56 54 56H10C8.89543 56 8 55.1046 8 54V26L32 8Z" fill="#B4502E"/>
+  <!-- Pulse line cutting through the house -->
+  <path d="M10 36H22L26 26L34 46L38 36H54" stroke="#FAF7F2" stroke-width="3.5" stroke-linecap="round" stroke-linejoin="round" fill="none"/>
+</svg>
