@@ -10,6 +10,7 @@ const issue: IssueRecord = {
   marketSummary: "Seattle's market is holding steady this week.",
   listings: [],
   createdAt: "2026-10-06T16:00:00Z",
+  sentAt: null,
 };
 
 describe("IssueList", () => {

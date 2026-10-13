@@ -20,6 +20,7 @@ function makeDeps(overrides: Partial<GenerateIssueDeps> = {}): GenerateIssueDeps
     saveIssue: vi.fn().mockResolvedValue("issue-1"),
     listIssues: vi.fn().mockResolvedValue([]),
     getIssue: vi.fn().mockResolvedValue(null),
+    markSent: vi.fn().mockResolvedValue(undefined),
   };
   return { researcher, copywriter, imageGenerator, issueStore, baseUrl: "https://realtypulse.example.com", ...overrides };
 }

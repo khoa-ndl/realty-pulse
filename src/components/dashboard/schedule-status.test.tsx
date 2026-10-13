@@ -10,6 +10,7 @@ const lastRun: IssueRecord = {
   marketSummary: "steady",
   listings: [{ address: "", neighborhood: "", price: 0, beds: 0, baths: 0, sqft: 0, blurb: "", photoUrls: [] }],
   createdAt: "2026-10-06T16:00:00Z",
+  sentAt: null,
 };
 
 describe("ScheduleStatus", () => {
