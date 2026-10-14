@@ -19,11 +19,18 @@ Google consent screen tied to your own Google account.
    **External**, app name "RealtyPulse", your email as support/developer
    contact. You can leave it in "Testing" status — you don't need to
    publish it, since only your own Gmail account will authorize it.
-3. Application type: **Desktop app**. Name it "RealtyPulse local".
+3. Application type: **Web application**. Name it "RealtyPulse OAuth
+   Playground". Under **Authorized redirect URIs**, add exactly:
+   `https://developers.google.com/oauthplayground` — the OAuth Playground
+   requires a Web application client with this redirect URI whitelisted;
+   a Desktop app client doesn't expose a configurable redirect URI and
+   will fail with `redirect_uri_mismatch` on the Playground.
 4. Save the generated **Client ID** and **Client Secret** — these are
    `GMAIL_CLIENT_ID` and `GMAIL_CLIENT_SECRET` in `.env`.
 5. On the consent screen's **Audience** tab, add the Gmail address you
-   want RealtyPulse to send from under **Test users**.
+   want RealtyPulse to send from under **Test users**. If the consent
+   screen's **Publishing status** is "In production", click **Back to
+   testing** first — the Test users section only appears in Testing mode.
 
 ## 3. Get a refresh token
 
@@ -33,6 +40,11 @@ writing a throwaway script:
 1. Go to [developers.google.com/oauthplayground](https://developers.google.com/oauthplayground).
 2. Click the gear icon (top right) → check **Use your own OAuth
    credentials** → paste your Client ID and Client Secret from step 2.
+   Do this *before* Authorize APIs, or Google issues the refresh token
+   against its own shared Playground client instead of yours, which
+   auto-revokes after 24h. Google only ever shows a client secret once,
+   at creation time — if you lose it, you can't view it again from the
+   Credentials page; click **+ Add secret** there to generate a new one.
 3. In the left panel, find **Gmail API v1** and select the scope
    `https://www.googleapis.com/auth/gmail.send`.
 4. Click **Authorize APIs**, sign in with the Gmail account you added as
