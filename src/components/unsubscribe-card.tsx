@@ -68,7 +68,7 @@ export function UnsubscribeCard({
         type="button"
         onClick={handleConfirm}
         disabled={pending}
-        className="min-h-11 self-start rounded-lg bg-[var(--color-primary)] px-5 text-sm font-semibold text-[var(--color-on-primary)] disabled:opacity-60"
+        className="min-h-11 cursor-pointer self-start rounded-lg bg-[var(--color-primary)] px-5 text-sm font-semibold text-[var(--color-on-primary)] transition-colors duration-150 hover:bg-[var(--color-primary-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "Unsubscribing…" : "Unsubscribe"}
       </button>

@@ -16,8 +16,12 @@
   --color-muted-foreground: #6B6058;
   --color-border: #E3D8CC;
   --color-destructive: #DC2626;
+  --color-destructive-hover: #B91C1C;
   --color-on-destructive: #FFFFFF;
+  --color-primary-hover: #9C4327;
   --color-success: #4D7C4D;
+  --color-success-subtle: #E6EFE6;
+  --color-primary-subtle: #FBEFE9;
   --color-ring: #B4502E;
 
   --font-heading: "Calistoga", Georgia, serif;
@@ -29,4 +33,11 @@ body {
   background: var(--color-background);
   color: var(--color-foreground);
   font-family: var(--font-body);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    transition-duration: 0.01ms !important;
+    animation-duration: 0.01ms !important;
+  }
 }

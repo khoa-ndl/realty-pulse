@@ -90,7 +90,7 @@ export function GenerateAndSend({
             type="button"
             onClick={handleGenerate}
             disabled={pending}
-            className="min-h-11 rounded-lg border border-[var(--color-border)] px-5 text-sm font-semibold text-[var(--color-foreground)] disabled:opacity-60"
+            className="min-h-11 cursor-pointer rounded-lg border border-[var(--color-border)] px-5 text-sm font-semibold text-[var(--color-foreground)] transition-colors duration-150 hover:bg-[var(--color-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
           >
             Regenerate
           </button>
@@ -98,7 +98,7 @@ export function GenerateAndSend({
             type="button"
             onClick={handleSend}
             disabled={pending}
-            className="min-h-11 rounded-lg bg-[var(--color-primary)] px-5 text-sm font-semibold text-[var(--color-on-primary)] disabled:opacity-60"
+            className="min-h-11 cursor-pointer rounded-lg bg-[var(--color-primary)] px-5 text-sm font-semibold text-[var(--color-on-primary)] transition-colors duration-150 hover:bg-[var(--color-primary-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
           >
             {pending ? "Sending…" : `Send to ${subscriberCount} subscribers`}
           </button>
@@ -110,11 +110,11 @@ export function GenerateAndSend({
   if (step === "sent") {
     return (
       <div className="flex flex-col items-start gap-3.5 rounded-xl border border-[var(--color-border)] bg-[var(--color-card)] p-7 shadow-sm">
-        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[#E6EFE6]">
+        <div className="flex h-12 w-12 items-center justify-center rounded-full bg-[var(--color-success-subtle)]">
           <svg width="22" height="22" viewBox="0 0 20 20" aria-hidden="true">
             <path
               d="M4 10.5L8 14.5L16 6"
-              stroke="#4D7C4D"
+              style={{ stroke: "var(--color-success)" }}
               strokeWidth="2"
               strokeLinecap="round"
               strokeLinejoin="round"
@@ -131,7 +131,7 @@ export function GenerateAndSend({
         <button
           type="button"
           onClick={handleStartOver}
-          className="min-h-11 rounded-lg border border-[var(--color-border)] px-5 text-sm font-semibold text-[var(--color-foreground)]"
+          className="min-h-11 cursor-pointer rounded-lg border border-[var(--color-border)] px-5 text-sm font-semibold text-[var(--color-foreground)] transition-colors duration-150 hover:bg-[var(--color-muted)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2"
         >
           Generate another
         </button>
@@ -176,7 +176,7 @@ export function GenerateAndSend({
         type="button"
         onClick={handleGenerate}
         disabled={pending}
-        className="min-h-11 rounded-lg bg-[var(--color-primary)] px-5 text-sm font-semibold text-[var(--color-on-primary)] disabled:opacity-60"
+        className="min-h-11 cursor-pointer rounded-lg bg-[var(--color-primary)] px-5 text-sm font-semibold text-[var(--color-on-primary)] transition-colors duration-150 hover:bg-[var(--color-primary-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "Generating…" : "Generate Preview"}
       </button>

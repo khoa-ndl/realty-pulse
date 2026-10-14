@@ -20,7 +20,7 @@ export function AddSubscriberForm() {
           name="email"
           type="email"
           required
-          className="min-h-11 rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm"
+          className="min-h-11 rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm transition-colors duration-150 focus:border-[var(--color-primary)] focus:outline-none focus:ring-[3px] focus:ring-[var(--color-primary)]/15"
         />
       </div>
       <div className="flex flex-col gap-1">
@@ -31,13 +31,13 @@ export function AddSubscriberForm() {
           id="source"
           name="source"
           type="text"
-          className="min-h-11 rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm"
+          className="min-h-11 rounded-lg border border-[var(--color-border)] px-3 py-2 text-sm transition-colors duration-150 focus:border-[var(--color-primary)] focus:outline-none focus:ring-[3px] focus:ring-[var(--color-primary)]/15"
         />
       </div>
       <button
         type="submit"
         disabled={pending}
-        className="min-h-11 rounded-lg bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-[var(--color-on-primary)] disabled:opacity-60"
+        className="min-h-11 cursor-pointer rounded-lg bg-[var(--color-primary)] px-5 py-2.5 text-sm font-semibold text-[var(--color-on-primary)] transition-colors duration-150 hover:bg-[var(--color-primary-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "Adding…" : "Add subscriber"}
       </button>

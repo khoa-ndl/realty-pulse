@@ -45,7 +45,7 @@ export function IssueList({ issues }: { issues: IssueRecord[] }) {
                   className={`rounded-full px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold ${
                     issue.triggerType === "scheduled"
                       ? "bg-[var(--color-muted)] text-[var(--color-muted-foreground)]"
-                      : "bg-[#FBEFE9] text-[var(--color-primary)]"
+                      : "bg-[var(--color-primary-subtle)] text-[var(--color-primary)]"
                   }`}
                 >
                   {issue.triggerType}
@@ -59,7 +59,7 @@ export function IssueList({ issues }: { issues: IssueRecord[] }) {
                 <span
                   className={`rounded-full px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold ${
                     issue.sentAt
-                      ? "bg-[#E6EFE6] text-[var(--color-success)]"
+                      ? "bg-[var(--color-success-subtle)] text-[var(--color-success)]"
                       : "bg-[var(--color-muted)] text-[var(--color-muted-foreground)]"
                   }`}
                 >
@@ -67,7 +67,10 @@ export function IssueList({ issues }: { issues: IssueRecord[] }) {
                 </span>
               </td>
               <td className="border-b border-[var(--color-border)] px-4 py-4 text-sm">
-                <Link href={`/dashboard/archive/${issue.id}`} className="font-semibold text-[var(--color-primary)]">
+                <Link
+                  href={`/dashboard/archive/${issue.id}`}
+                  className="rounded font-semibold text-[var(--color-primary)] transition-colors duration-150 hover:text-[var(--color-primary-hover)] hover:underline focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2"
+                >
                   View →
                 </Link>
               </td>

@@ -66,14 +66,14 @@ export function SubscribeCard({ onSubscribe }: { onSubscribe: (email: string) =>
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="min-h-11 rounded-lg border border-[var(--color-border)] px-3 py-2.5 text-sm"
+          className="min-h-11 rounded-lg border border-[var(--color-border)] px-3 py-2.5 text-sm transition-colors duration-150 focus:border-[var(--color-primary)] focus:outline-none focus:ring-[3px] focus:ring-[var(--color-primary)]/15"
         />
       </div>
       {error && <p className="text-sm text-[var(--color-destructive)]">{error}</p>}
       <button
         type="submit"
         disabled={pending}
-        className="min-h-11 w-full rounded-lg bg-[var(--color-primary)] px-5 py-3 text-sm font-semibold text-[var(--color-on-primary)] disabled:opacity-60"
+        className="min-h-11 w-full cursor-pointer rounded-lg bg-[var(--color-primary)] px-5 py-3 text-sm font-semibold text-[var(--color-on-primary)] transition-colors duration-150 hover:bg-[var(--color-primary-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
       >
         {pending ? "Subscribing…" : "Subscribe"}
       </button>

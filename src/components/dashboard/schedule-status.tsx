@@ -26,7 +26,7 @@ export function ScheduleStatus({
                 <span
                   className={`rounded-full px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold ${
                     lastRun.sentAt
-                      ? "bg-[#E6EFE6] text-[var(--color-success)]"
+                      ? "bg-[var(--color-success-subtle)] text-[var(--color-success)]"
                       : "bg-[var(--color-muted)] text-[var(--color-muted-foreground)]"
                   }`}
                 >
@@ -76,7 +76,7 @@ export function ScheduleStatus({
                     <span
                       className={`rounded-full px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold ${
                         issue.sentAt
-                          ? "bg-[#E6EFE6] text-[var(--color-success)]"
+                          ? "bg-[var(--color-success-subtle)] text-[var(--color-success)]"
                           : "bg-[var(--color-muted)] text-[var(--color-muted-foreground)]"
                       }`}
                     >

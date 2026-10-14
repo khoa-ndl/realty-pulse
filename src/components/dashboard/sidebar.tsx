@@ -45,24 +45,24 @@ const NAV_ITEMS = [
 
 export function Sidebar({ currentPath }: { currentPath: string }) {
   return (
-    <nav className="flex w-60 flex-col gap-7 border-r border-[var(--color-border)] bg-[var(--color-card)] p-4">
-      <div className="flex items-center gap-2.5 px-2">
+    <nav className="flex flex-row items-center gap-4 overflow-x-auto border-b border-[var(--color-border)] bg-[var(--color-card)] p-3 lg:w-60 lg:flex-col lg:items-stretch lg:gap-7 lg:overflow-visible lg:border-r lg:border-b-0 lg:p-4">
+      <div className="flex shrink-0 items-center gap-2.5 px-2">
         <svg width="26" height="26" viewBox="0 0 64 64" aria-hidden="true">
-          <path d="M32 8L56 26V54C56 55.1 55.1 56 54 56H10C8.9 56 8 55.1 8 54V26L32 8Z" fill="#B4502E" />
+          <path d="M32 8L56 26V54C56 55.1 55.1 56 54 56H10C8.9 56 8 55.1 8 54V26L32 8Z" style={{ fill: "var(--color-primary)" }} />
           <path
             d="M10 36H22L26 26L34 46L38 36H54"
-            stroke="#FAF7F2"
+            style={{ stroke: "var(--color-background)" }}
             strokeWidth="3.5"
             strokeLinecap="round"
             strokeLinejoin="round"
             fill="none"
           />
         </svg>
-        <span className="font-[family-name:var(--font-heading)] text-lg text-[var(--color-foreground)]">
+        <span className="hidden font-[family-name:var(--font-heading)] text-lg text-[var(--color-foreground)] sm:inline">
           RealtyPulse
         </span>
       </div>
-      <div className="flex flex-col gap-1">
+      <div className="flex flex-row gap-1 lg:flex-col">
         {NAV_ITEMS.map((item) => {
           const isActive =
             currentPath === item.href || (item.href !== "/dashboard" && currentPath.startsWith(`${item.href}/`));
@@ -71,7 +71,7 @@ export function Sidebar({ currentPath }: { currentPath: string }) {
               key={item.href}
               href={item.href}
               aria-current={isActive ? "page" : undefined}
-              className={`flex min-h-11 items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium ${
+              className={`flex min-h-11 shrink-0 items-center gap-2.5 rounded-lg px-3 py-2.5 text-sm font-medium transition-colors duration-150 focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2 ${
                 isActive
                   ? "bg-[var(--color-muted)] font-semibold text-[var(--color-primary)]"
                   : "text-[var(--color-muted-foreground)] hover:bg-[var(--color-muted)]"
@@ -80,7 +80,7 @@ export function Sidebar({ currentPath }: { currentPath: string }) {
               <svg width="18" height="18" viewBox="0 0 20 20" aria-hidden="true">
                 {item.icon}
               </svg>
-              {item.label}
+              <span className="sr-only sm:not-sr-only">{item.label}</span>
             </Link>
           );
         })}

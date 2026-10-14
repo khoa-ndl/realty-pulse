@@ -39,7 +39,7 @@ export function SubscriberList({
           <button
             type="button"
             onClick={handleRemoveSelected}
-            className="min-h-11 rounded-lg bg-[var(--color-destructive)] px-4 py-2 text-sm font-semibold text-[var(--color-on-destructive)]"
+            className="min-h-11 cursor-pointer rounded-lg bg-[var(--color-destructive)] px-4 py-2 text-sm font-semibold text-[var(--color-on-destructive)] transition-colors duration-150 hover:bg-[var(--color-destructive-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2"
           >
             Remove selected
           </button>
@@ -86,7 +86,7 @@ export function SubscriberList({
                   {formatPacificDate(subscriber.subscribedAt)}
                 </td>
                 <td className="border-b border-[var(--color-border)] px-4 py-3 text-sm">
-                  <span className="rounded-full bg-[#E6EFE6] px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold text-[var(--color-success)]">
+                  <span className="rounded-full bg-[var(--color-success-subtle)] px-2.5 py-1 font-[family-name:var(--font-data)] text-xs font-semibold text-[var(--color-success)]">
                     Active
                   </span>
                 </td>

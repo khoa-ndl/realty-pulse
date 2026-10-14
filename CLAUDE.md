@@ -28,7 +28,13 @@ An AI-driven weekly newsletter platform for real-estate brokerages. Full design:
 
 ## Current phase
 
-Scaffold, the outbound MCP layer (Gmail + Supabase), and the full content
-pipeline (listings, research, copywriting, images, issue assembly and
-storage) are complete. Next: the operator dashboard (generate & send,
-issue archive, subscriber management, scheduled-run status).
+Scaffold, the outbound MCP layer (Gmail + Supabase), the full content
+pipeline, the operator dashboard (generate & send, issue archive,
+subscriber management, scheduled-run status), the public signup/confirm/
+unsubscribe flow, and a brand-matched visual pass (dashboard UI +
+newsletter/confirmation email templates, against
+`design-system/realtypulse/MASTER.md`) are all complete. Not yet done:
+first deploy to Vercel, and filling in the local `.env` (several
+Supabase/MCP/cron values are still blank, which blocks running `/login`
+and `/dashboard` locally — `/subscribe` and the other public pages don't
+need them).

@@ -40,7 +40,7 @@ export default function LoginPage() {
         </h1>
         <p className="mb-6 text-sm text-[var(--color-muted-foreground)]">Sign in to the operator dashboard.</p>
 
-        <label className="mb-1 block text-xs font-mono uppercase tracking-wide text-[var(--color-muted-foreground)]" htmlFor="email">
+        <label className="mb-1 block font-[family-name:var(--font-data)] text-xs uppercase tracking-wide text-[var(--color-muted-foreground)]" htmlFor="email">
           Email
         </label>
         <input
@@ -49,10 +49,10 @@ export default function LoginPage() {
           required
           value={email}
           onChange={(e) => setEmail(e.target.value)}
-          className="mb-4 w-full rounded-lg border border-[var(--color-border)] px-3 py-2.5 text-sm"
+          className="mb-4 w-full rounded-lg border border-[var(--color-border)] px-3 py-2.5 text-sm transition-colors duration-150 focus:border-[var(--color-primary)] focus:outline-none focus:ring-[3px] focus:ring-[var(--color-primary)]/15"
         />
 
-        <label className="mb-1 block text-xs font-mono uppercase tracking-wide text-[var(--color-muted-foreground)]" htmlFor="password">
+        <label className="mb-1 block font-[family-name:var(--font-data)] text-xs uppercase tracking-wide text-[var(--color-muted-foreground)]" htmlFor="password">
           Password
         </label>
         <input
@@ -61,7 +61,7 @@ export default function LoginPage() {
           required
           value={password}
           onChange={(e) => setPassword(e.target.value)}
-          className="mb-4 w-full rounded-lg border border-[var(--color-border)] px-3 py-2.5 text-sm"
+          className="mb-4 w-full rounded-lg border border-[var(--color-border)] px-3 py-2.5 text-sm transition-colors duration-150 focus:border-[var(--color-primary)] focus:outline-none focus:ring-[3px] focus:ring-[var(--color-primary)]/15"
         />
 
         {error && <p className="mb-4 text-sm text-[var(--color-destructive)]">{error}</p>}
@@ -69,7 +69,7 @@ export default function LoginPage() {
         <button
           type="submit"
           disabled={submitting}
-          className="min-h-11 w-full rounded-lg bg-[var(--color-primary)] px-5 py-3 text-sm font-semibold text-[var(--color-on-primary)] disabled:opacity-60"
+          className="min-h-11 w-full cursor-pointer rounded-lg bg-[var(--color-primary)] px-5 py-3 text-sm font-semibold text-[var(--color-on-primary)] transition-colors duration-150 hover:bg-[var(--color-primary-hover)] focus-visible:outline-none focus-visible:ring-2 focus-visible:ring-[var(--color-ring)] focus-visible:ring-offset-2 disabled:cursor-not-allowed disabled:opacity-60"
         >
           {submitting ? "Signing in…" : "Sign in"}
         </button>
