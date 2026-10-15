@@ -14,6 +14,7 @@ const REQUIRED: Record<string, string> = {
   NEXT_PUBLIC_APP_URL: "http://localhost:3000",
   NEXT_PUBLIC_SUPABASE_ANON_KEY: "test",
   CRON_SECRET: "test",
+  NEXT_PUBLIC_SENTRY_DSN: "test",
 };
 
 describe("getEnv", () => {
