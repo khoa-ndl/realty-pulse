@@ -1,0 +1,156 @@
+[
+  {
+    "id": "7e2f1a3c-1111-4a9b-8c21-0a1b2c3d4e5f",
+    "createdAt": "2026-09-05T17:00:00.000Z",
+    "sentAt": "2026-09-05T17:02:14.000Z",
+    "triggerType": "scheduled",
+    "marketSummary": "Seattle inventory held flat week over week, with median price at $812K. Capitol Hill and Fremont saw the most new listings; days-on-market ticked down slightly in Ballard.",
+    "listings": [
+      {
+        "address": "412 15th Ave E, Seattle, WA",
+        "neighborhood": "Capitol Hill",
+        "price": 795000,
+        "beds": 2,
+        "baths": 2,
+        "sqft": 1180,
+        "blurb": "Top-floor corner unit with skyline views and a private balcony, two blocks from Volunteer Park.",
+        "photoUrls": ["https://placehold.co/600x400/B4502E/FAF7F2?text=412+15th+Ave+E"]
+      },
+      {
+        "address": "3309 Fremont Pl N, Seattle, WA",
+        "neighborhood": "Fremont",
+        "price": 868000,
+        "beds": 3,
+        "baths": 2,
+        "sqft": 1540,
+        "blurb": "Remodeled 1920s bungalow with original fir floors and a detached studio.",
+        "photoUrls": ["https://placehold.co/600x400/6B7256/FAF7F2?text=3309+Fremont+Pl+N"]
+      }
+    ]
+  },
+  {
+    "id": "7e2f1a3c-2222-4a9b-8c21-0a1b2c3d4e5f",
+    "createdAt": "2026-09-12T17:00:00.000Z",
+    "sentAt": "2026-09-12T17:01:48.000Z",
+    "triggerType": "scheduled",
+    "marketSummary": "Median price rose 2% to $828K as inventory tightened ahead of the fall slowdown. Multiple-offer activity returned for well-priced listings under $750K.",
+    "listings": [
+      {
+        "address": "5521 California Ave SW, Seattle, WA",
+        "neighborhood": "West Seattle",
+        "price": 724000,
+        "beds": 3,
+        "baths": 1.5,
+        "sqft": 1360,
+        "blurb": "Craftsman with a fenced yard and partial Sound views, walking distance to the Junction.",
+        "photoUrls": ["https://placehold.co/600x400/B4502E/FAF7F2?text=5521+California+Ave+SW"]
+      },
+      {
+        "address": "2208 NW Market St #4, Seattle, WA",
+        "neighborhood": "Ballard",
+        "price": 599000,
+        "beds": 1,
+        "baths": 1,
+        "sqft": 740,
+        "blurb": "Modern condo above the Locks with in-unit laundry and a deeded parking spot.",
+        "photoUrls": ["https://placehold.co/600x400/6B7256/FAF7F2?text=2208+NW+Market+St"]
+      }
+    ]
+  },
+  {
+    "id": "7e2f1a3c-3333-4a9b-8c21-0a1b2c3d4e5f",
+    "createdAt": "2026-09-19T17:00:00.000Z",
+    "sentAt": "2026-09-19T17:03:02.000Z",
+    "triggerType": "manual",
+    "marketSummary": "A quieter week overall, with fewer new listings citywide. Buyers are getting more flexibility on inspection contingencies compared to earlier this summer.",
+    "listings": [
+      {
+        "address": "1904 E Yesler Way, Seattle, WA",
+        "neighborhood": "Central District",
+        "price": 915000,
+        "beds": 4,
+        "baths": 2.5,
+        "sqft": 2050,
+        "blurb": "Updated four-bedroom with a finished basement and off-street parking for two cars.",
+        "photoUrls": ["https://placehold.co/600x400/B4502E/FAF7F2?text=1904+E+Yesler+Way"]
+      }
+    ]
+  },
+  {
+    "id": "7e2f1a3c-4444-4a9b-8c21-0a1b2c3d4e5f",
+    "createdAt": "2026-09-26T17:00:00.000Z",
+    "sentAt": "2026-09-26T17:01:55.000Z",
+    "triggerType": "scheduled",
+    "marketSummary": "Median price held at $825K for the third straight week. Rate cuts earlier this month pulled a few more buyers off the sidelines, especially for starter condos.",
+    "listings": [
+      {
+        "address": "720 Queen Anne Ave N #302, Seattle, WA",
+        "neighborhood": "Queen Anne",
+        "price": 645000,
+        "beds": 2,
+        "baths": 1,
+        "sqft": 980,
+        "blurb": "Corner unit with territorial views and a walk score in the high 90s.",
+        "photoUrls": ["https://placehold.co/600x400/6B7256/FAF7F2?text=720+Queen+Anne+Ave+N"]
+      },
+      {
+        "address": "8812 Greenwood Ave N, Seattle, WA",
+        "neighborhood": "Greenwood",
+        "price": 758000,
+        "beds": 3,
+        "baths": 2,
+        "sqft": 1420,
+        "blurb": "Single-level rambler on a large corner lot with room to expand.",
+        "photoUrls": ["https://placehold.co/600x400/B4502E/FAF7F2?text=8812+Greenwood+Ave+N"]
+      }
+    ]
+  },
+  {
+    "id": "7e2f1a3c-5555-4a9b-8c21-0a1b2c3d4e5f",
+    "createdAt": "2026-10-03T17:00:00.000Z",
+    "sentAt": "2026-10-03T17:02:30.000Z",
+    "triggerType": "scheduled",
+    "marketSummary": "Inventory ticked up 4% this week while median price held steady at $825K. Buyers are seeing more negotiating room on listings over 30 days old, especially in Capitol Hill and Ballard.",
+    "listings": [
+      {
+        "address": "123 Pike St, Seattle, WA",
+        "neighborhood": "Capitol Hill",
+        "price": 849000,
+        "beds": 3,
+        "baths": 2,
+        "sqft": 1620,
+        "blurb": "Bright craftsman with a renovated kitchen, south-facing deck, and a two-car garage.",
+        "photoUrls": ["https://placehold.co/600x400/B4502E/FAF7F2?text=123+Pike+St"]
+      },
+      {
+        "address": "88 Market Ave, Seattle, WA",
+        "neighborhood": "Ballard",
+        "price": 712000,
+        "beds": 2,
+        "baths": 1,
+        "sqft": 1140,
+        "blurb": "Walkable townhome steps from the Ballard Locks, with an updated primary suite.",
+        "photoUrls": ["https://placehold.co/600x400/6B7256/FAF7F2?text=88+Market+Ave"]
+      }
+    ]
+  },
+  {
+    "id": "7e2f1a3c-6666-4a9b-8c21-0a1b2c3d4e5f",
+    "createdAt": "2026-10-24T17:00:00.000Z",
+    "sentAt": null,
+    "triggerType": "scheduled",
+    "marketSummary": "Draft pending review — not yet sent. Early read: new listings up slightly ahead of the November slowdown, with Beacon Hill emerging as this week's most active neighborhood.",
+    "listings": [
+      {
+        "address": "2715 Beacon Ave S, Seattle, WA",
+        "neighborhood": "Beacon Hill",
+        "price": 689000,
+        "beds": 3,
+        "baths": 1.5,
+        "sqft": 1280,
+        "blurb": "Light-filled split-level with a newly landscaped backyard and light rail access nearby.",
+        "photoUrls": ["https://placehold.co/600x400/6B7256/FAF7F2?text=2715+Beacon+Ave+S"]
+      }
+    ]
+  }
+]
